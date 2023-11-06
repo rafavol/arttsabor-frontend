@@ -1,0 +1,44 @@
+﻿@page "/fetchdata"
+@using ArttSabor.Domain.Entities;
+@using System.Net.Http;
+@inject HttpClient Http;
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (categorias == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in categorias)
+            {
+                <tr>
+                    <td>@forecast.Nome</td>
+                    <td>@forecast.Id</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Categoria[]? categorias;
+
+    protected override async Task OnInitializedAsync()
+    {
+        categorias = await Http.GetFromJsonAsync<Categoria[]>("Categorias/GetCategorias");
+    }
+}
